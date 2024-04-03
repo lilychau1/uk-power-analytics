@@ -40,7 +40,7 @@ default_args = {
 # Define workflow name, schedule and start date
 local_workflow = DAG(
     'ingest_batch_data',
-    schedule_interval='@hourly',
+    schedule_interval='0 5 * * *', # Daily 5AM
     start_date=datetime.today()
 )
 
