@@ -1,5 +1,4 @@
-# Data Engineering Zoomcamp Project: 
-# UK Power Generation Data Analytics
+# Data Engineering Zoomcamp Project: UK Power Generation Data Analytics
 Data pipeline for analysing Elexon electricity generation output per generation unit in the UK
 
 ## Background

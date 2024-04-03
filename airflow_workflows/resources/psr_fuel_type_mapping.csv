@@ -1,0 +1,17 @@
+new_psr_type,fuel_category,bm_fuel_type,psr_type,source_category
+CCGT,Fossil Gas,CCGT,,Fossil
+Fossil Oil,Fossil Oil,OIL,Fossil Oil,Fossil
+Fossil Hard coal,Fossil Hard coal,COAL,Fossil Hard coal,Fossil
+Nuclear,Nuclear,NUCLEAR,Nuclear,Nuclear
+Wind (Unspecified),Wind,WIND,,Clean
+Pumped storage,Hydro,PS,,Clean
+Non pumped storage hydro,Hydro,NPSHYD,,Clean
+OCGT,Fossil Gas,OCGT,,Fossil
+Other,Other,OTHER,Other,Other
+Biomass,Biomass,BIOMASS,Biomass,Clean
+Wind Offshore,Wind,,Wind Offshore,Clean
+Wind Onshore,Wind,,Wind Onshore,Clean
+Non pumped storage hydro,Hydro,,Hydro Run-of-river and poundage,Clean
+Non pumped storage hydro,Hydro,,Hydro Water Reservoir,Clean
+Fossil Gas,Fossil Gas,,Fossil Gas,Fossil
+Generation (Unspecified),Other,,Generation,Other

@@ -1,0 +1,53 @@
+# BMRS Generation data
+bmrs_generation:
+  url_template: https://data.elexon.co.uk/bmrs/api/v1/datasets/B1610/stream?from={request_from_datetime}&to={request_to_datetime}
+  output_file_template: bmrs_generation_{}_{}.parquet
+  table_name: bmrs_generation
+  partition_cols: 
+    - settlement_date_partition
+
+# BMRS Capacity data
+bmrs_capacity:
+  url_template: https://data.elexon.co.uk/bmrs/api/v1/datasets/IGCPU/stream?publishDateTimeFrom={request_from_datetime}&publishDateTimeTo={request_to_datetime}&format=json
+  output_file_template: bmrs_capacity_{}_{}.parquet
+  table_name: bmrs_capacity
+
+# Power plant location and ID data
+power_plant_location:
+  url: https://osuked.github.io/Power-Station-Dictionary/attribute_sources/plant-locations/plant-locations.csv
+  table_name: power_plant_location
+
+power_plant_id: 
+  url: https://raw.githubusercontent.com/OSUKED/Power-Station-Dictionary/main/data/dictionary/ids.csv
+  table_name: power_plant_id
+
+bmrs_power_plant_info:
+  url: https://data.elexon.co.uk/bmrs/api/v1/reference/bmunits/all
+  table_name: bmrs_power_plant_info
+
+psr_fuel_type_mapping:
+  table_name: psr_fuel_type_mapping
+
+coordinate_df_replace_mapping:
+  Newcastle: Newcastle upon Tyne
+  Southend: Southend on Sea
+  Derry: Londonderry
+  Wrecsam: Wrexham
+  Caerdydd: Cardiff
+
+new_coordinates_entries:
+  - - Saint Asaph
+    - 53.257999
+    - -3.442000
+  - - Saint Davids
+    - 51.882000
+    - -5.269000
+  - - Swansea
+    - 51.621441
+    - -3.943646
+  - - Isle of Man
+    - 54.2312716
+    - -4.569504
+  - - Douglas
+    - 55.5499978
+    - -3.8499966
