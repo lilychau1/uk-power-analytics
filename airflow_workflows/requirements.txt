@@ -1,0 +1,13 @@
+apache-airflow
+apache-airflow-providers-apache-spark
+apache-airflow-providers-celery>=3.3.0
+apache-airflow-providers-google
+geopy
+loguru
+pandas
+psycopg2-binary
+pyarrow<10.1.0,>=10.0.1
+pytest
+pyspark
+requests
+sqlalchemy
