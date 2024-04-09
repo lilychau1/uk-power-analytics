@@ -197,7 +197,7 @@ Google Looker Studio was used to experiment with visualising UK per unit power g
 
 ![uk_power_analytics_data_viz](https://github.com/lilychau1/uk-power-analytics/assets/58731610/09dea2f6-f47b-4097-a3cc-faf35cba3d41)
 
-The first chart (left) depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county in the month of February 2024. 
+The first chart (left) depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county from 1 Feb 2024 to 27 Mar 2024. 
 
 The second chart (top right) illustrated the total generation by fuel category and county origin of generation. 
 
