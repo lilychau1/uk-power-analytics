@@ -190,3 +190,13 @@ After initialisies `initialise_data` is run, you will observe the following:
     * psr_fuel_type_mapping
 
 Every day, after `ingest_batch_data` is run at 5am, there will be incremental generation data ingested to both the GCS bucket `bmrs_generation` folder and BigQuery tables `bmrs_generation`, `bmrs_generation_partitioned` and `generation_capacity_360_view`. 
+
+## Data Visualisation
+
+Google Looker Studio was used to experiment with visualising UK per unit power generation data. 
+
+The first chart depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county in the month of February 2024. 
+
+The second chart (top right) illustrated the total generation by fuel category and county origin of generation. 
+
+The third chart (bottom right) showed the average unit generation output per settlement period (0 - 00:00 to 00:30, ..., 48 - 23:30 to 00:00). 
