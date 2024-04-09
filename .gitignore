@@ -1,3 +1,4 @@
 **/__pycache__
 **/logs
 .env
+airflow_workflows/power_data/

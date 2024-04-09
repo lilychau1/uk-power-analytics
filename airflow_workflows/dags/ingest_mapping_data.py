@@ -28,7 +28,6 @@ def transform_power_plant_location_mapping_callable(raw_filepath: str, output_fi
     df = _transform_location_df(df)
     df.to_csv(output_filepath, index=False)
 
-
 def transform_bmrs_power_plant_info_mapping_callable(raw_filepath: str, output_filepath: str) -> None: 
     """Transform power plant ID table and save to local path (in AIRFLOW)
 
@@ -81,7 +80,7 @@ def _unstack_delimited_bm_unit_ids(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Unstacked power plant ID dataframe
     """
-    return(
+    df = (
         df.set_index(['dictionary_id', 'name', 'national_grid_bm_unit_id'])
             .stack()
             .str.split(',', expand=True)
@@ -90,6 +89,9 @@ def _unstack_delimited_bm_unit_ids(df: pd.DataFrame) -> pd.DataFrame:
             .reset_index(-1, drop=True)
             .reset_index()
     )
+    
+    df['bm_unit'] = df['bm_unit'].str.strip()
+    return df
 
 def _transform_location_df(df: pd.DataFrame) -> pd.DataFrame:
     """Transform power plant location table

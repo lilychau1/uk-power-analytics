@@ -51,3 +51,10 @@ new_coordinates_entries:
   - - Douglas
     - 55.5499978
     - -3.8499966
+
+# BigQuery aggregated data
+generation_by_unit_by_settlement_date:
+  table_name: generation_by_unit_by_settlement_date
+
+fuel_with_max_daily_gen_by_county: 
+  table_name: fuel_with_max_daily_gen_by_county
