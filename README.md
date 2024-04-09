@@ -195,7 +195,9 @@ Every day, after `ingest_batch_data` is run at 5am, there will be incremental ge
 
 Google Looker Studio was used to experiment with visualising UK per unit power generation data. 
 
-The first chart depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county in the month of February 2024. 
+![uk_power_analytics_data_viz](https://github.com/lilychau1/uk-power-analytics/assets/58731610/09dea2f6-f47b-4097-a3cc-faf35cba3d41)
+
+The first chart (left) depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county in the month of February 2024. 
 
 The second chart (top right) illustrated the total generation by fuel category and county origin of generation. 
 
