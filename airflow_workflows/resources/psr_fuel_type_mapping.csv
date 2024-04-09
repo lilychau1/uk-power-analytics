@@ -15,3 +15,6 @@ Non pumped storage hydro,Hydro,,Hydro Run-of-river and poundage,Clean
 Non pumped storage hydro,Hydro,,Hydro Water Reservoir,Clean
 Fossil Gas,Fossil Gas,,Fossil Gas,Fossil
 Generation (Unspecified),Other,,Generation,Other
+Synchronous Condenser,Synchronous Condenser,,,Clean
+Battery Storage,Battery Storage,,,Clean
+Solar PV,Solar PV,,,Clean

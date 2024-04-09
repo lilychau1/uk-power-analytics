@@ -50,6 +50,7 @@ columns_snake_case = rename_column_camel_case_to_snake_case(schema.names)
 df = df \
     .withColumn('publishTime', F.to_timestamp('publishTime')) \
     .withColumn('effectiveFrom', F.to_timestamp('effectiveFrom')) \
+    .na.drop(subset=['bmUnit'])
 
 df = df.toDF(*columns_snake_case) 
 

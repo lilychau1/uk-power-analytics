@@ -54,7 +54,8 @@ with local_workflow:
         python_callable=fetch_bmrs_data,
         op_kwargs=dict(
             url_template=bmrs_generation_url_template, 
-            request_from_datetime=initialise_bmrs_from_datetime,
+            # request_from_datetime=initialise_bmrs_from_datetime,
+            request_from_datetime=datetime(2024, 3, 25, 0, 0, 1),
             request_to_datetime=initialise_bmrs_generation_to_datetime, 
             json_raw_output_path=initialise_bmrs_generation_json_raw_output_filepath
         )
@@ -230,6 +231,22 @@ with local_workflow:
         },
     )
 
+    gcs_to_bq_ext_bm_unit_info_overlay_task = BigQueryCreateExternalTableOperator(
+        task_id='gcs_to_bq_ext_bm_unit_info_overlay_task',
+        table_resource={
+            'tableReference': {
+                'projectId': GCS_PROJECT_ID,
+                'datasetId': BIGQUERY_DATASET,
+                'tableId': bm_unit_info_overlay_table_name,
+            },
+            'externalDataConfiguration': {
+                'autodetect': True,
+                'sourceFormat': 'PARQUET',
+                'sourceUris': [f'gs://{GCS_BUCKET}/{bm_unit_info_overlay_table_name}/*.parquet'],
+            },
+        },
+    )
+
     bq_ext_to_partitioned_generation_task = BigQueryInsertJobOperator(
         task_id='bq_ext_to_partitioned_generation_task',
         configuration={
@@ -245,6 +262,26 @@ with local_workflow:
         configuration={
             'query': {
                 'query': create_aggregated_table_query,
+                'useLegacySql': False,
+            }
+        },
+    )
+    
+    bq_create_generation_by_unit_by_settlement_date_table_task = BigQueryInsertJobOperator(
+        task_id='bq_partitioned_to_generation_by_unit_by_settlement_date_table_task',
+        configuration={
+            'query': {
+                'query': create_generation_by_unit_by_settlement_date_table_query,
+                'useLegacySql': False,
+            }
+        },
+    )
+    
+    bq_create_fuel_wth_max_daily_gen_by_county_table_task = BigQueryInsertJobOperator(
+        task_id='bq_create_fuel_wth_max_daily_gen_by_county_table_task',
+        configuration={
+            'query': {
+                'query': create_fuel_wth_max_daily_gen_by_county_table_query,
                 'useLegacySql': False,
             }
         },
@@ -266,6 +303,9 @@ gcs_to_bq_ext_power_plant_location_task >>  \
 gcs_to_bq_ext_power_plant_id_task >>  \
 gcs_to_bq_ext_bmrs_power_plant_info_task >>  \
 gcs_to_bq_ext_psr_fuel_type_mapping_task >>  \
+gcs_to_bq_ext_bm_unit_info_overlay_task >> \
 bq_ext_to_partitioned_generation_task >>  \
-bq_partitioned_to_360_view_table_task
+bq_partitioned_to_360_view_table_task >> \
+bq_create_generation_by_unit_by_settlement_date_table_task >> \
+bq_create_fuel_wth_max_daily_gen_by_county_table_task
 

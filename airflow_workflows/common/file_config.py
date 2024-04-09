@@ -145,6 +145,12 @@ coordinate_df_replace_mapping =  config['coordinate_df_replace_mapping']
 new_coordinates_entries =  config['new_coordinates_entries']
 
 ##############################################
+# BMRS BM Unit info overlay data
+##############################################
+bm_unit_info_overlay_table_name = 'bm_unit_info_overlay'
+bm_unit_info_overlay_file = f'{resources_folder}/bm_unit_info_overlay.csv'
+
+##############################################
 # Power plant ID data
 ##############################################
 
@@ -187,10 +193,39 @@ power_plant_mappings_download_command = '&&'.join([
     f"curl -X 'GET' '{bmrs_power_plant_info_file_url}'  -H 'accept: text/json' > {bmrs_power_plant_info_raw_output_file}", 
 ])
 
+
+##############################################
+# Transformed Bigquery tables
+##############################################
+generation_by_unit_by_settlement_date_table_name = config['generation_by_unit_by_settlement_date']['table_name']
+fuel_with_max_daily_gen_by_county_table_name = config['fuel_with_max_daily_gen_by_county']['table_name']
+
 ##############################################
 # Configuration for saving data
 ##############################################
-
+# Bespoke
+bespoke_upload_files_config_list = [
+    {
+        'table_name': bmrs_capacity_table_name,
+        'local_file': initialise_bmrs_capacity_output_filepath,
+    },      
+    {
+        'table_name': power_plant_location_table_name,
+        'local_file': initialise_power_plant_location_processed_output_file,
+    }, 
+    {
+        'table_name': power_plant_id_table_name,
+        'local_file': initialise_power_plant_id_processed_output_file,
+    }, 
+    {
+        'table_name': bmrs_power_plant_info_table_name,
+        'local_file': bmrs_power_plant_info_processed_output_file,
+    }, 
+    {
+        'table_name': psr_fuel_type_mapping_table_name,
+        'local_file': psr_fuel_type_mapping_file,
+    }, 
+]
 # Initialise
 initialise_upload_files_config_list = [
     {
@@ -218,6 +253,10 @@ initialise_upload_files_config_list = [
         'table_name': psr_fuel_type_mapping_table_name,
         'local_file': psr_fuel_type_mapping_file,
     }, 
+    {
+        'table_name': bm_unit_info_overlay_table_name,
+        'local_file': bm_unit_info_overlay_file,
+    },     
 ]
 
 # Batch daily
