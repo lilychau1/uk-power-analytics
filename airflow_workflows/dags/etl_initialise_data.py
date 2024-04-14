@@ -55,7 +55,7 @@ with local_workflow:
         op_kwargs=dict(
             url_template=bmrs_generation_url_template, 
             # request_from_datetime=initialise_bmrs_from_datetime,
-            request_from_datetime=datetime(2024, 3, 25, 0, 0, 1),
+            request_from_datetime=initialise_bmrs_from_datetime,
             request_to_datetime=initialise_bmrs_generation_to_datetime, 
             json_raw_output_path=initialise_bmrs_generation_json_raw_output_filepath
         )
