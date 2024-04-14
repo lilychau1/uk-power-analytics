@@ -1,2 +1,2 @@
 cd airflow_workflows
-docker-compose up
+docker compose up
