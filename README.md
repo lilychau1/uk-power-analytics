@@ -29,10 +29,13 @@ Other sources:
 The project is developed using Python. 
 
 * Cloud: GCP
+* Infrastructure as Code (IaC): Terraform
 * Workflow orchestration: Airflow
 * Data Warehouse: BigQuery
 * Batch processing: Spark
 * Data viz: Looker
+
+![uk_power_analytics_flowchart](https://github.com/lilychau1/uk-power-analytics/assets/58731610/2f97db34-bab4-4900-8191-0ef55294ada9)
 
 ## Data sources
 The power generation data comes from the Elexon Insights Solution platform (https://bmrs.elexon.co.uk/). 
