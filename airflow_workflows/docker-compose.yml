@@ -53,7 +53,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ~/.google/credentials/:/.google/credentials:ro
 
-  user: "${AIRFLOW_UID:-1000}:0"
+  user: "${AIRFLOW_UID:-501}:0"
   depends_on:
     &airflow-common-depends-on
     redis:
