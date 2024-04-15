@@ -44,7 +44,7 @@ x-airflow-common:
     - airflow-power-analytics-network
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
-    - ${AIRFLOW_PROJ_DIR:-.}/power_data:/opt/airflow/power_data
+    - ${AIRFLOW_PROJ_DIR:-.}/power_data:/opt/airflow/power_data:rw
     - ${AIRFLOW_PROJ_DIR:-.}/resources:/opt/airflow/resources
     - ${AIRFLOW_PROJ_DIR:-.}/jobs:/opt/airflow/jobs
     - ${AIRFLOW_PROJ_DIR:-.}/common:/opt/airflow/common
