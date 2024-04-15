@@ -15,7 +15,7 @@ variable "location" {
 
 variable "bq_dataset_name" {
   description = "My BigQuery Dataset Name"
-  default     = "uk_power_analytics"
+  default     = "uk_power_analytics_dataset"
 }
 
 variable "gcs_bucket_class" {
