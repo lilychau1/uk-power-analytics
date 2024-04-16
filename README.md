@@ -162,6 +162,13 @@ Kick-start your project (execute the proposed plan) with the following command:
 terraform apply
 ```
 
+If no longer in use, destroy all remote objects to avoid unnecessary GCP costs with the following command: 
+
+```
+terraform destroy
+```
+This command will delete the VM instance, GSC Bucket and Bigquery dataset specific for this project. 
+
 ### Forward port 8080 to access airflow web server
 
 Go to VM Instance page, copy the External IP of the VM named `uk-power-analytics-vm`. 
