@@ -1,6 +1,40 @@
 # Data Engineering Zoomcamp Project: UK Power Generation Data Analytics
 Data pipeline for analysing Elexon electricity generation output per generation unit in the UK
 
+## Table of Contents
+
+1. [Background](#background)
+2. [Scope](#scope)
+3. [Technology](#technology)
+4. [Data Sources](#data-sources)
+5. [Data Pipeline Design](#data-pipeline-design)
+    - [Initialisation Data Ingestion](#initialisation-data-ingestion)
+        - [Actual Power Generation Per Generation Unit](#actual-power-generation-per-generation-unit)
+        - [Latest Production Capacity Data Per BM Unit](#latest-production-capacity-data-per-bm-unit)
+        - [Latest Power Plant Locations](#latest-power-plant-locations)
+        - [Power Plant ID Dictionary](#power-plant-id-dictionary)
+        - [Fuel Category Mapping](#fuel-category-mapping)
+    - [Incremental Data Ingestion: Batch Processing and Loading](#incremental-data-ingestion-batch-processing-and-loading)
+        - [Daily: Actual Power Generation Per Generation Unit](#daily-actual-power-generation-per-generation-unit)
+        - [Daily: Latest Production Capacity Data Per BM Unit](#daily-latest-production-capacity-data-per-bm-unit)
+        - [Yearly: Latest Power Plant Locations and Power Plant ID Dictionary](#yearly-latest-power-plant-locations-and-power-plant-id-dictionary)
+6. [Storage and Data Warehouse](#storage-and-data-warehouse)
+7. [Pre-requisites](#pre-requisites)
+    - [git](#git)
+    - [GCP](#gcp)
+    - [Terraform](#terraform)
+8. [Getting Started](#getting-started)
+    - [Cloning Repository](#cloning-repository)
+    - [Add GCP Credential](#add-gcp-credential)
+    - [Update .env](#update-env)
+    - [Setting Up Terraform](#setting-up-terraform)
+    - [Accessing Airflow](#accessing-airflow)
+    - [Set Up Spark Connection on Airflow](#set-up-spark-connection-on-airflow)
+    - [Explore DAGs](#explore-dags)
+    - [Destroy Resources](#destroy-resources)
+9. [Data Visualisation](#data-visualisation)
+
+
 ## Background
 This project analyses the electricity generation in the UK, segregated by region, production source and source type (clean, fossil, nuclear or others). The analytics will provide a good understanding of the overall electricity generation carbon footprint of the entire nation, and an exploratory start point for transmission system planning when gradually phasing out fossil-fuelled power generation under the Net Zero initiative.
 
@@ -90,6 +124,10 @@ For the reference tables, they will be stored as separate parquet files.
 
 All the data will be loaded to BigQuery for further transformation. 
 
+<br>
+
+---
+
 ## Pre-requisites
 
 ### git
@@ -100,20 +138,20 @@ Install git via https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 1. GCP account
 Set up a GCP account via https://cloud.google.com. 
 
-2. GCP bucket
-Create a GCP bucket named 'uk-power-analytics'
+1. Enable Cloud Resource Manager API
+Enable Cloud Resource Manager API [here](https://console.cloud.google.com/apis/library/cloudresourcemanager.googleapis.com). 
 
-3. GCP BigQuery dataset
-Create a GCP BigQuery dataset named 'uk_power_analytics'
+1. GCP credentials
+Create a service account in [Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts) by clicking `CREATE SERVICE ACCOUNT`.
 
-4. GCP credentials
-Create a service account, assign the following roles: 
-* BigQuery Admin
-* Compute Admin
-* Project IAM Admin
-* Service Account Admin
-* Service Account User
-* Storage Admin
+Assign the following roles in [IAM & Admin](https://console.cloud.google.com/iam-admin) via the <img width="22" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/00f6546a-012b-48b1-83e2-3ee607fa84ea"> icon next to your desired service account: 
+
+      - BigQuery Admin
+      - Compute Admin
+      - Project IAM Admin
+      - Service Account Admin
+      - Service Account User
+      - Storage Admin
 
 Generate a corresponding ssh credentials file and store it as json file named `my-creds.json` in the cloned repo under `/keys/`: 
 `<repo-directory>/keys/my-creds.json`
@@ -121,6 +159,10 @@ Generate a corresponding ssh credentials file and store it as json file named `m
 
 ### Terraform
 Install Terraform with the following guide: [https://git-scm.com/book/en/v2/Getting-Started-Installing-Git](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+
+<br>
+
+---
 
 ## Getting Started
 
@@ -146,76 +188,90 @@ Create a file named `.env` in the cloned repo and add GCP bucket configuration:
 `.env`: 
 ``` 
 GCP_PROJECT_ID=<your_project_id>
+GCP_ACCOUNT_ID=<your_account_id>
 ```
 
-### Setting up terraform
+### Setting up Terraform
 
-Initialise terraform with the following command:
+1. Initialise Terraform with the following command:
 
 ```
 terraform init
 ```
 
-Preview the changes with the following command: 
+2. Preview the changes with the following command: 
 
 ```
 terraform plan
 ```
 
-Kick-start your project (execute the proposed plan) with the following command: 
+3. Kick-start your project (execute the proposed plan) with the following command: 
 
 ```
 terraform apply
 ```
-
-If no longer in use, destroy all remote objects to avoid unnecessary GCP costs with the following command: 
+A successful set up will show the following output:
 
 ```
-terraform destroy
+Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
 ```
-This command will delete the VM instance, GSC Bucket and Bigquery dataset specific for this project. 
 
-### Forward port 8080 to access airflow web server
+To inspect the logs during GCP VM instance start-up, navigate to [VM Instances](https://console.cloud.google.com/compute/instances), click on `uk-power-analytics-vm`, under `Logs` section, click on `Serial port 1 (console)`. 
 
-Go to VM Instance page, copy the External IP of the VM named `uk-power-analytics-vm`. 
+> **_NOTE:_** If no longer in use, destroy all remote objects to avoid unnecessary GCP costs with `terraform destroy`. This command will delete the VM instance, Terraform-created service account, GSC Bucket and Bigquery dataset specific for this project. 
+
+### Accessing Airflow
+
+Terraform has kick-started the airflow run, and the web server is already setup at `localhost:8080` of the GCP VM instance. To access it, users will need to forward the port to a specific localhost of the local machine. 
+
+1. In the same [VM Instances](https://console.cloud.google.com/compute/instances) page, copy the External IP of the VM named `uk-power-analytics-vm`. 
 <img width="1091" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/dd580ec8-50b6-435b-915a-75bde732f7c6">
 
-Go to your local terminal, insert the IP to your SSH known hosts with the following command: 
+2. Go to your local terminal, insert the IP to your SSH known hosts with the following command: 
 
 ```
 ssh-keyscan -H <external_ip> >> ~/.ssh/known_hosts
 ```
 
-Connect to the airflow web server (localhost:8080) with the following command: 
+3. Connect to the airflow web server (localhost:8080) with the following command: 
 ```
 gcloud compute ssh uk-power-analytics-vm -- -L 8080:localhost:8080 
 ```
 
 ### Set up spark connection on airflow
-In your web browser, go to http://localhost:8080/. Enter username `airflow` and password `airflow` (unless otherwise specified in .env with `_AIRFLOW_WWW_USER_USERNAME` and `_AIRFLOW_WWW_USER_PASSWORD`). 
+1. In your web browser, go to [http://localhost:8080/](http://localhost:8080/). Enter username `airflow` and password `airflow`.
 
-In the top navigation bar, go to Admin > Connections > + > Fill in the following: 
+<img width="1231" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/766de522-bd41-4446-8520-08ecc6a4a7f2">
+
+2. In the top navigation bar, go to Admin > Connections > + > Fill in the following: 
 Connection Id: `spark-conn`
 Connection Type: `spark`
 Host: `spark://spark-master`
 Port: `7077`
 
+<img height="300" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/cf98355c-88c7-49b5-8cbf-a7c33f0f0bf8">
+<img height="300" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/221d85f4-50a0-4dd2-a1b7-48b7c43f2285">
+<img height="300" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/d65109c3-04a5-4ecc-bd42-5640dc7e0f3f">
+
+
 ### Explore DAGs
 
 In the DAGs tab, you will find two different workflows: `initialise_data` and `ingest_batch_data`. 
+<img width="445" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/07449e6f-f9d5-4280-9b9b-b3c55c42ce2a">
 
 `initialise_data` is run once only, while `ingest_batch_data` is run daily. 
 
-After initialisies `initialise_data` is run, you will observe the following:
-1. New parquets, csv and json files in local `airflow/power_data` folder
-2. New folders in your GCS bucket named `uk-power-analytics`: 
+To initiation the data ingestion process, click on `initialise_data` and the <img width="36" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/4c0a3c16-95be-4b19-a44f-fbd37b2798f2"> icon on the top right corner.
+
+After it runs successfully, you will observe the following:
+1. New GCS bucket named `uk-power-analytics`: 
     * bmrs_capacity
     * bmrs_generation
     * bmrs_power_plant_info
     * power_plant_id
     * power_plant_location
     * psr_fuel_type_mapping
-3. New tables in your GCS BigQuery dataset `uk_power_analytics`: 
+2. New tables in your GCS BigQuery dataset `uk_power_analytics`: 
     * bmrs_generation
     * bmrs_generation_partitioned
     * bmrs_power_plant_info
@@ -225,6 +281,19 @@ After initialisies `initialise_data` is run, you will observe the following:
     * psr_fuel_type_mapping
 
 Every day, after `ingest_batch_data` is run at 5am, there will be incremental generation data ingested to both the GCS bucket `bmrs_generation` folder and BigQuery tables `bmrs_generation`, `bmrs_generation_partitioned` and `generation_capacity_360_view`. 
+
+### Destroy resources
+If no longer in use, destroy all remote objects to avoid unnecessary GCP costs with 
+
+```
+terraform destroy
+```
+
+This command will delete the VM instance, Terraform-created service account, GSC Bucket and Bigquery dataset specific for this project. 
+
+<br>
+
+---
 
 ## Data Visualisation
 
