@@ -35,9 +35,15 @@ Data pipeline for analysing Elexon electricity generation output per generation 
 9. [Data Visualisation](#data-visualisation)
 9. [Contact](#contact)
 
+<br>
+
+---
 
 ## Background
-This project analyses the electricity generation in the UK, segregated by region, production source and source type (clean, fossil, nuclear or others). The analytics will provide a good understanding of the overall electricity generation carbon footprint of the entire nation, and an exploratory start point for transmission system planning when gradually phasing out fossil-fuelled power generation under the Net Zero initiative.
+This project is a proof of concept showcasing an end-to-end data ingestion pipeline that utilizes Terraform, Google Cloud Platform (GCP), Apache Airflow, and Docker to analyze the Elexon BMRS electricity generation data via its [Insights Solution data platform](https://bmrs.elexon.co.uk/). The analysis focuses on electricity output by individual generating units in the UK, segregated by region, production source, and source type (clean, fossil, nuclear, or others). 
+
+The analysis aims to offer valuable insights into the carbon footprint associated with electricity generation on a national scale. Furthermore, it serves as an initial exploration for transmission system planning, particularly in the context of transitioning away from fossil-fueled power generation in alignment with the Net Zero initiative.
+
 
 ## Scope
 The geographical coverage is within the United Kingdom, including England, Scotland, Wales, and Northern Ireland. 
@@ -63,12 +69,12 @@ Other sources:
 ## Technology
 The project is developed using Python. 
 
-* Cloud: GCP
+* Cloud Infrastructure: Google Cloud Platform (GCP)
 * Infrastructure as Code (IaC): Terraform
-* Workflow orchestration: Airflow
-* Data Warehouse: BigQuery
-* Batch processing: Spark
-* Data viz: Looker
+* Workflow Orchestration: Apache Airflow
+* Data Warehouse: Google BigQuery
+* Batch Processing: Apache Spark
+* Data Visualization: Looker Studio
 
 ![uk_power_analytics_flowchart](https://github.com/lilychau1/uk-power-analytics/assets/58731610/2f97db34-bab4-4900-8191-0ef55294ada9)
 
@@ -81,27 +87,27 @@ The power generation data comes from the Elexon Insights Solution platform (http
 For initial set-up, a one-time DAG will be performed in Airflow to initialise base data, by extracting, loading and transforming the following data:
 
 #### Actual power generation per generation unit
-The Actual Generation Output Per Generation Unit (B1610)  stream data (https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/B1610/stream) is published five working days after the end of the operational period, available in 30-minute intervals. For example, data from 19 Mar 2024 00:15 to 20 Mar 2024 00:00 will all be published on 26 Mar 2024. 
+The Actual Generation Output Per Generation Unit (B1610)  [stream data](https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/B1610/stream) is published five working days after the end of the operational period, available in 30-minute intervals. For example, data from 19 Mar 2024 00:15 to 20 Mar 2024 00:00 will all be published on 26 Mar 2024. 
 
 The one-time DAG will ingest 3 days’ worth of generation data, from 4 days plus 5 days ago until current date minus 5 days, converting the data into parquet format which involves renaming and type conversion.
 
 #### Latest production capacity data per BM Unit
-The Installed Generation Capacity per Unit (IGCPU / B1420) data  (https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/IGCPU) is updated upon record addition or update. 
+The [Installed Generation Capacity per Unit (IGCPU / B1420) data](https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/IGCPU) is updated upon record addition or update. 
 
 The initialisation DAG extracts all existing data from the site and stores it as a parquet file in the GCS bucket and loads it to BigQuery as a separate table. 
 
 #### Latest Power Plant Locations
-The Power Plant Locations dataset (https://osuked.github.io/Power-Station-Dictionary/attribute_sources/plant-locations/plant-locations.csv) is a one-off CSV produced by Ayrton Bourn, based on his project-defined identifier. The data consists of the identifier, latitude and longitude of the power station. 
+The [Power Plant Locations dataset](https://osuked.github.io/Power-Station-Dictionary/attribute_sources/plant-locations/plant-locations.csv) is a one-off CSV produced by [Ayrton Bourn](https://osuked.github.io/Power-Station-Dictionary/), based on his project-defined identifier. The data consists of the identifier, latitude and longitude of the power station. 
 
 Again, the initialisation DAG extracts the entire CSV from the URL and stores it as a parquet file in the GCS bucket and loads it to BigQuery as a separate table. 
 
 #### Power Plant ID Dictionary
-The Power Plant IDs dataset (https://github.com/OSUKED/Power-Station-Dictionary/blob/main/data/dictionary/ids.csv) is a one-off CSV produced by Ayrton Bourn, matching his project-defined identifier to the corresponding Elexon’s Settlement BMU ID(s). This will be used to map the above location information against a BM Unit. 
+The [Power Plant IDs dataset](https://github.com/OSUKED/Power-Station-Dictionary/blob/main/data/dictionary/ids.csv) is a one-off CSV produced by Ayrton Bourn, matching his project-defined identifier to the corresponding Elexon’s Settlement BMU ID(s). This will be used to map the above location information against a BM Unit. 
 
 The DAG extracts the entire CSV from the URLand stores it as a parquet file, transforms it so that the unique identifier is the BMU ID and stores it as a processed parquet in the GCS bucket and loads it to BigQuery as a separate table. 
 
 #### Fuel category mapping
-This is a self-defined mapping CSV of each fuel to either one of the following energy source categories: Clean, Fossil and Other. 
+This is a self-defined mapping CSV of each fuel to either one of the following energy source categories: Clean, Fossil, Nuclear and Other. 
 
 The initialisation DAG creates it as a CSV in the GCS bucket and loads it to BigQuery as a separate table. 
 
@@ -304,6 +310,14 @@ Google Looker Studio was used to experiment with visualising UK per unit power g
 
 The first chart (left) depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county from 1 Feb 2024 to 27 Mar 2024. 
 
+The second chart (top right) illustrated the total generation by fuel category and county origin of generation. 
+
+The third chart (bottom right) showed the average unit generation output per settlement period (0 - 00:00 to 00:30, ..., 48 - 23:30 to 00:00). 
+
+<br>
+
+---
+
 ## Contact
 
 If you have any questions, suggestions, or feedback regarding this project, feel free to reach out to me:
@@ -313,7 +327,3 @@ If you have any questions, suggestions, or feedback regarding this project, feel
 - **LinkedIn:** [Lily Chau](www.linkedin.com/in/chauyeeki)
 
 I welcome any contributions, bug reports, or comments. Your input is valuable and helps improve the project for everyone. Thank you for your interest and support!
-
-The second chart (top right) illustrated the total generation by fuel category and county origin of generation. 
-
-The third chart (bottom right) showed the average unit generation output per settlement period (0 - 00:00 to 00:30, ..., 48 - 23:30 to 00:00). 
