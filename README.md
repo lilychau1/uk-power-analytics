@@ -24,11 +24,11 @@ Data pipeline for analysing Elexon electricity generation output per generation 
     - [GCP](#gcp)
     - [Terraform](#terraform)
 8. [Getting Started](#getting-started)
-    - [Cloning Repository](#cloning-repository)
+    - [Clone Repository](#clone-repository)
     - [Add GCP Credential](#add-gcp-credential)
     - [Update .env](#update-env)
-    - [Setting Up Terraform](#setting-up-terraform)
-    - [Accessing Airflow](#accessing-airflow)
+    - [Set Up Terraform](#set-up-terraform)
+    - [Access Airflow](#access-airflow)
     - [Set Up Spark Connection on Airflow](#set-up-spark-connection-on-airflow)
     - [Explore DAGs](#explore-dags)
     - [Destroy Resources](#destroy-resources)
@@ -166,7 +166,7 @@ Install Terraform with the following guide: [https://git-scm.com/book/en/v2/Gett
 
 ## Getting Started
 
-### Cloning Repository
+### Clone Repository
 Clone this repo to your local machine with one of the following commands: 
 
 With HTTPS:
@@ -191,7 +191,7 @@ GCP_PROJECT_ID=<your_project_id>
 GCP_ACCOUNT_ID=<your_account_id>
 ```
 
-### Setting up Terraform
+### Set up Terraform
 
 1. Initialise Terraform with the following command:
 
@@ -220,7 +220,7 @@ To inspect the logs during GCP VM instance start-up, navigate to [VM Instances](
 
 > **_NOTE:_** If no longer in use, destroy all remote objects to avoid unnecessary GCP costs with `terraform destroy`. This command will delete the VM instance, Terraform-created service account, GSC Bucket and Bigquery dataset specific for this project. 
 
-### Accessing Airflow
+### Access Airflow
 
 Terraform has kick-started the airflow run, and the web server is already setup at `localhost:8080` of the GCP VM instance. To access it, users will need to forward the port to a specific localhost of the local machine. 
 
