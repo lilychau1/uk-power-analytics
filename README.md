@@ -33,6 +33,7 @@ Data pipeline for analysing Elexon electricity generation output per generation 
     - [Explore DAGs](#explore-dags)
     - [Destroy Resources](#destroy-resources)
 9. [Data Visualisation](#data-visualisation)
+9. [Contact](#contact)
 
 
 ## Background
@@ -302,6 +303,16 @@ Google Looker Studio was used to experiment with visualising UK per unit power g
 ![uk_power_analytics_data_viz](https://github.com/lilychau1/uk-power-analytics/assets/58731610/09dea2f6-f47b-4097-a3cc-faf35cba3d41)
 
 The first chart (left) depicts the main fuel category (Clean, Fossil, Nuclear, Others) of each county from 1 Feb 2024 to 27 Mar 2024. 
+
+## Contact
+
+If you have any questions, suggestions, or feedback regarding this project, feel free to reach out to me:
+
+- **Name:** Lily Chau
+- **GitHub:** [lilychau1](https://github.com/lilychau1/)
+- **LinkedIn:** [Lily Chau](www.linkedin.com/in/chauyeeki)
+
+I welcome any contributions, bug reports, or comments. Your input is valuable and helps improve the project for everyone. Thank you for your interest and support!
 
 The second chart (top right) illustrated the total generation by fuel category and county origin of generation. 
 
