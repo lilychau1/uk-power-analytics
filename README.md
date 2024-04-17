@@ -29,10 +29,13 @@ Other sources:
 The project is developed using Python. 
 
 * Cloud: GCP
+* Infrastructure as Code (IaC): Terraform
 * Workflow orchestration: Airflow
 * Data Warehouse: BigQuery
 * Batch processing: Spark
 * Data viz: Looker
+
+![uk_power_analytics_flowchart](https://github.com/lilychau1/uk-power-analytics/assets/58731610/2f97db34-bab4-4900-8191-0ef55294ada9)
 
 ## Data sources
 The power generation data comes from the Elexon Insights Solution platform (https://bmrs.elexon.co.uk/). 
@@ -89,9 +92,6 @@ All the data will be loaded to BigQuery for further transformation.
 
 ## Pre-requisites
 
-### Docker
-Install Docker via https://docs.docker.com/engine/install/
-
 ### git
 Install git via https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
@@ -109,7 +109,12 @@ Create a GCP BigQuery dataset named 'uk_power_analytics'
 4. GCP credentials
 Create a service account, assign the roles of BigQuery Admin, Storage Admin and Compute Admin. 
 
-Generate a corresponding ssh credentials file and store it as json file in your local home directory: `~/.google_credentials/credentials/credentials.json`
+Generate a corresponding ssh credentials file and store it as json file named `my-creds.json` in the cloned repo under `/keys/`: 
+`<repo-directory>/keys/my-creds.json`
+
+
+### Terraform
+Install Terraform with the following guide: [https://git-scm.com/book/en/v2/Getting-Started-Installing-Git](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
 ## Getting Started
 
@@ -126,34 +131,58 @@ With ssh:
 git clone git@github.com:lilychau1/uk-power-analytics.git
 ```
 
-### Setting up environment
-
-Navigate to the cloned repo workspace. Run the following command:
-
-```
-./setup.sh
-```
-
-Necessary directories will be created:
-* airflow/workflows/power_data/initialise/bmrs_generation
-* airflow/workflows/power_data/initialise/bmrs_capacity
-* airflow/workflows/power_data/batch/bmrs_generation
-* airflow/workflows/power_data/batch/bmrs_capacity
-
-A bespoke docker image consisting of airflow and Spark will also be created
+### Add GCP credential
+If not done already, generate a corresponding ssh credentials file and store it as json file named `my-creds.json` in the cloned repo under `/keys/`: `<repo-directory>/keys/my-creds.json`
 
 ### Update .env
-Create a file named `.env` and add GCP bucket configuration:
+Create a file named `.env` in the cloned repo and add GCP bucket configuration:
 
-```
+`.env`: 
+``` 
 GCP_PROJECT_ID=<your_project_id>
 ```
 
-### Run docker-compose
-To start the container, run:
+### Setting up terraform
+
+Initialise terraform with the following command:
 
 ```
-docker-compose up
+terraform init
+```
+
+Preview the changes with the following command: 
+
+```
+terraform plan
+```
+
+Kick-start your project (execute the proposed plan) with the following command: 
+
+```
+terraform apply
+```
+
+If no longer in use, destroy all remote objects to avoid unnecessary GCP costs with the following command: 
+
+```
+terraform destroy
+```
+This command will delete the VM instance, GSC Bucket and Bigquery dataset specific for this project. 
+
+### Forward port 8080 to access airflow web server
+
+Go to VM Instance page, copy the External IP of the VM named `uk-power-analytics-vm`. 
+<img width="1091" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/dd580ec8-50b6-435b-915a-75bde732f7c6">
+
+Go to your local terminal, insert the IP to your SSH known hosts with the following command: 
+
+```
+ssh-keyscan -H <external_ip> >> ~/.ssh/known_hosts
+```
+
+Connect to the airflow web server (localhost:8080) with the following command: 
+```
+gcloud compute ssh uk-power-analytics-vm -- -L 8080:localhost:8080 
 ```
 
 ### Set up spark connection on airflow
