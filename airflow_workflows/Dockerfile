@@ -9,7 +9,7 @@ RUN apt-get update && \
 COPY requirements.txt .
 
 # Set JAVA_HOME environment variable
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
 USER airflow
 RUN pip install --no-cache-dir -r requirements.txt
