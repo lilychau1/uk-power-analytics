@@ -31,11 +31,34 @@ resource "google_compute_firewall" "allow-ssh" {
   source_ranges = ["0.0.0.0/0"]  # Adjust as needed to restrict access
 }
 
+resource "google_service_account" "airflow_service_account" {
+  account_id   = "uk-power-analytics-airflow"
+  display_name = "Service Account for Airflow"
+  project = local.envs["GCP_PROJECT_ID"]
+}
+
+resource "google_project_iam_member" "airflow_sa_bigquery_role" {
+  project = local.envs["GCP_PROJECT_ID"]
+  role    = "roles/bigquery.admin"
+  member  = "serviceAccount:${google_service_account.airflow_service_account.email}"
+}
+
+resource "google_project_iam_member" "airflow_sa_storage_role" {
+  project = local.envs["GCP_PROJECT_ID"]
+  role    = "roles/storage.objectCreator"
+  member  = "serviceAccount:${google_service_account.airflow_service_account.email}"
+}
+
 resource "google_compute_instance" "uk_power_analytics_vm" {
   name         = var.vm_instance
   machine_type = var.machine_type
   zone         = var.region
   # tags         = google_compute_firewall.allow_ssh.target_tags
+
+  service_account {
+    email  = "${local.envs["GCP_ACCOUNT_ID"]}@${local.envs["GCP_PROJECT_ID"]}.iam.gserviceaccount.com"
+    scopes = ["userinfo-email", "compute-ro", "storage-full"]
+  }
 
   boot_disk {
     initialize_params {
@@ -55,8 +78,6 @@ resource "google_compute_instance" "uk_power_analytics_vm" {
     GCP_PROJECT_ID = local.envs["GCP_PROJECT_ID"]
     AIRFLOW_UID = 501
     _PIP_ADDITIONAL_REQUIREMENTS = ""
-    _AIRFLOW_WWW_USER_USERNAME = "airflow"
-    _AIRFLOW_WWW_USER_PASSWORD = "airflow"
   }
   
   metadata_startup_script = "${file("./start_up_script.sh")}"
