@@ -107,7 +107,13 @@ Create a GCP bucket named 'uk-power-analytics'
 Create a GCP BigQuery dataset named 'uk_power_analytics'
 
 4. GCP credentials
-Create a service account, assign the roles of BigQuery Admin, Storage Admin and Compute Admin. 
+Create a service account, assign the following roles: 
+* BigQuery Admin
+* Compute Admin
+* Project IAM Admin
+* Service Account Admin
+* Service Account User
+* Storage Admin
 
 Generate a corresponding ssh credentials file and store it as json file named `my-creds.json` in the cloned repo under `/keys/`: 
 `<repo-directory>/keys/my-creds.json`
