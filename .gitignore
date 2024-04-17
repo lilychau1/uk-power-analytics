@@ -1,5 +1,6 @@
 **/__pycache__
-**/logs
+**/logs/*
+**/plugins/*
 .env
 airflow_workflows/power_data/
 
@@ -43,3 +44,5 @@ terraform.rc
 .terraform.lock.hcl
 
 .env
+
+!.gitkeep
