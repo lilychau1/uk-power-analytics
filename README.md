@@ -272,17 +272,17 @@ In the DAGs tab, you will find two different workflows: `initialise_data` and `i
 
 `initialise_data` is run once only, while `ingest_batch_data` is run daily. 
 
-To initiation the data ingestion process, click on `initialise_data` and the <img width="36" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/4c0a3c16-95be-4b19-a44f-fbd37b2798f2"> icon on the top right corner.
+To initiate the data ingestion process, click both the toggle buttons <img width="45" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/32e1807f-ddff-4b01-a9fd-778d846fe85b"> next to `initialise_data` and `ingest_batch_data`. 
 
 After it runs successfully, you will observe the following:
-1. New GCS bucket named `uk-power-analytics`: 
+1. New GCS bucket named `<your-project-id>-uk-power-analytics`: 
     * bmrs_capacity
     * bmrs_generation
     * bmrs_power_plant_info
     * power_plant_id
     * power_plant_location
     * psr_fuel_type_mapping
-2. New tables in your GCS BigQuery dataset `uk_power_analytics`: 
+2. New tables in your GCS BigQuery dataset `uk_power_analytics_dataset`: 
     * bmrs_generation
     * bmrs_generation_partitioned
     * bmrs_power_plant_info
