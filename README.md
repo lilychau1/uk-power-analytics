@@ -1,6 +1,8 @@
 # Data Engineering Zoomcamp Project: UK Power Generation Data Analytics
 Data pipeline for analysing Elexon electricity generation output per generation unit in the UK
 
+![uk_power_analytics_flowchart](https://github.com/lilychau1/uk-power-analytics/assets/58731610/2f97db34-bab4-4900-8191-0ef55294ada9)
+
 ## Table of Contents
 
 1. [Background](#background)
@@ -43,7 +45,6 @@ Data pipeline for analysing Elexon electricity generation output per generation 
 This project is a proof of concept showcasing an end-to-end data ingestion pipeline that utilizes Terraform, Google Cloud Platform (GCP), Apache Airflow, and Docker to analyze the Elexon BMRS electricity generation data via its [Insights Solution data platform](https://bmrs.elexon.co.uk/). The analysis focuses on electricity output by individual generating units in the UK, segregated by region, production source, and source type (clean, fossil, nuclear, or others). 
 
 The analysis aims to offer valuable insights into the carbon footprint associated with electricity generation on a national scale. Furthermore, it serves as an initial exploration for transmission system planning, particularly in the context of transitioning away from fossil-fueled power generation in alignment with the Net Zero initiative.
-
 
 ## Scope
 The geographical coverage is within the United Kingdom, including England, Scotland, Wales, and Northern Ireland. 
