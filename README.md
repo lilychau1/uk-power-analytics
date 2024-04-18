@@ -396,6 +396,6 @@ If you have any questions, suggestions, or feedback regarding this project, feel
 
 - **Name:** Lily Chau
 - **GitHub:** [lilychau1](https://github.com/lilychau1/)
-- **LinkedIn:** [Lily Chau](www.linkedin.com/in/chauyeeki)
+- **LinkedIn:** www.linkedin.com/in/lilychau1
 
 I welcome any contributions, bug reports, or comments. Your input is valuable and helps improve the project for everyone. Thank you for your interest and support!
