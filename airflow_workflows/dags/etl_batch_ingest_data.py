@@ -48,7 +48,7 @@ with local_workflow:
     
     gcs_generation_files = GCSListObjectsOperator(
         task_id="gcs_generation_files",
-        bucket="power-analytics",
+        bucket=GCS_BUCKET,
         prefix="bmrs_generation/",
         match_glob="*/**/settlement_date=*/*",
     )
