@@ -160,6 +160,9 @@ Assign the following roles in [IAM & Admin](https://console.cloud.google.com/iam
       - Service Account User
       - Storage Admin
 
+
+> **_WARNING:_** As a proof of concept, the project creates a service account with the permission of `iam.serviceAccountKeyAdmin`, `bigquery.admin` and `storage.objectCreator`, which might not be the best security practice. Any suggestions welcome on connecting GCE with Airflow in a dockerised setting in Terraform. 
+
 Generate a corresponding ssh credentials file and store it as json file named `my-creds.json` in the cloned repo under `/keys/`: 
 `<repo-directory>/keys/my-creds.json`
 
