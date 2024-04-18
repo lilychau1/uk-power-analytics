@@ -51,8 +51,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-    # - ${AIRFLOW_PROJ_DIR:-.}/.google/credentials:/.google/credentials:ro
-    - ~/.google/credentials:/.google/credentials:ro
+    - ${AIRFLOW_PROJ_DIR:-.}/.google/credentials:/.google/credentials:ro
 
   user: "${AIRFLOW_UID:-501}:0"
   depends_on:
