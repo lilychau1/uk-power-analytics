@@ -5,14 +5,14 @@ x-spark-common: &spark-common
     - ./power_data:/opt/bitnami/spark/power_data
     - ./resources:/opt/bitnami/spark/resources
   networks:
-    - airflow-power-analytics-network
+    - airflow-uk-power-analytics-network
 
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  image: airflow-power-analytics
+  image: airflow-uk-power-analytics
   build: 
     context: .
     dockerfile: ./Dockerfile
@@ -41,7 +41,7 @@ x-airflow-common:
     GCP_GCS_BUCKET: "${GCP_GCS_BUCKET}"
     BIGQUERY_DATASET: 'uk_power_analytics_dataset'
   networks:
-    - airflow-power-analytics-network
+    - airflow-uk-power-analytics-network
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/power_data:/opt/airflow/power_data:rw
@@ -76,7 +76,7 @@ services:
       start_period: 5s
     restart: always
     networks:
-      - airflow-power-analytics-network
+      - airflow-uk-power-analytics-network
 
   redis:
     image: redis:latest
@@ -93,7 +93,7 @@ services:
       start_period: 30s
     restart: always
     networks:
-      - airflow-power-analytics-network
+      - airflow-uk-power-analytics-network
       
   spark-master:
     <<: *spark-common
@@ -286,4 +286,4 @@ volumes:
   postgres-db-volume:
 
 networks:
-  airflow-power-analytics-network: 
+  airflow-uk-power-analytics-network: 
