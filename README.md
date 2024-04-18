@@ -162,7 +162,8 @@ Assign the following roles in [IAM & Admin](https://console.cloud.google.com/iam
       - Storage Admin
 
 
-> **_WARNING:_** As a proof of concept, the project creates a service account with the permission of `iam.serviceAccountKeyAdmin`, `bigquery.admin` and `storage.objectCreator`, which might not be the best security practice. Any suggestions welcome on connecting GCE with Airflow in a dockerised setting in Terraform. 
+> **_WARNING:_** As a proof of concept, the project creates a service account with the permission of 
+`BigQuery Admin`, `Service Account Key Admin`, `Storage Insights Collector Service`, `Storage Object Creator` and `Storage Object Viewer`, which might not be the best security practice. Any suggestions welcome on connecting GCE with Airflow in a dockerised setting in Terraform for this specific use case. 
 
 Generate a corresponding ssh credentials file and store it as json file named `my-creds.json` in the cloned repo under `/keys/`: 
 `<repo-directory>/keys/my-creds.json`
@@ -224,7 +225,7 @@ terraform apply
 A successful set up will show the following output:
 
 ```
-Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
 ```
 
 To inspect the logs during GCP VM instance start-up, navigate to [VM Instances](https://console.cloud.google.com/compute/instances), click on `uk-power-analytics-vm`, under `Logs` section, click on `Serial port 1 (console)`. 
@@ -273,6 +274,13 @@ In the DAGs tab, you will find two different workflows: `initialise_data` and `i
 `initialise_data` is run once only, while `ingest_batch_data` is run daily. 
 
 To initiate the data ingestion process, click both the toggle buttons <img width="45" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/32e1807f-ddff-4b01-a9fd-778d846fe85b"> next to `initialise_data` and `ingest_batch_data`. 
+
+To inspect the run process, click on the desired DAG name (`initialise_data` or `ingest_batch_data`. 
+
+A successful run session will be suggested by green boxes in all steps of operations.
+
+<img height="300" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/86513f0b-3986-4839-8c4f-5b5a3fedfb1a"> <img height="300" alt="image" src="https://github.com/lilychau1/uk-power-analytics/assets/58731610/1ddadbf5-9aa1-4b2d-9e11-90f7d41dfb66">
+
 
 After it runs successfully, you will observe the following:
 1. New GCS bucket named `<your-project-id>-uk-power-analytics`: 
