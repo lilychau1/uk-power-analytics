@@ -13,6 +13,10 @@ variable "location" {
   default     = "EU"
 }
 
+variable "airflow_service_account_id" {
+  description = "Service Account ID to be Created for Airflow Operations"
+  default     = "uk-power-analytics-airflow"
+}
 variable "bq_dataset_name" {
   description = "My BigQuery Dataset Name"
   default     = "uk_power_analytics_dataset"
