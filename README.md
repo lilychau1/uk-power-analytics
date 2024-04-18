@@ -79,6 +79,66 @@ The project is developed using Python.
 
 ![uk_power_analytics_flowchart](https://github.com/lilychau1/uk-power-analytics/assets/58731610/2f97db34-bab4-4900-8191-0ef55294ada9)
 
+## File Hierarchy
+
+```bash
+├── README.md
+├── airflow_workflows
+│   ├── Dockerfile
+│   ├── __init__.py
+│   ├── common
+│   │   ├── __init__.py
+│   │   ├── bq_queries.py
+│   │   ├── config.yaml
+│   │   ├── file_config.py
+│   │   ├── namings.py
+│   │   ├── schema.py
+│   │   └── utils.py
+│   ├── config
+│   │   └── airflow.cfg
+│   ├── dags
+│   │   ├── etl_batch_ingest_data.py
+│   │   ├── etl_initialise_data.py
+│   │   ├── gcp_operations.py
+│   │   ├── ingest_bmrs_data.py
+│   │   └── ingest_mapping_data.py
+│   ├── docker-compose.yml
+│   ├── jobs
+│   │   ├── pyspark_batch_transform_bmrs_capacity.py
+│   │   ├── pyspark_batch_transform_bmrs_generation.py
+│   │   ├── pyspark_transform_bmrs_capacity.py
+│   │   └── pyspark_transform_bmrs_generation.py
+│   ├── logs
+│   ├── plugins
+│   ├── requirements.txt
+│   └── resources
+│       ├── bm_unit_info_overlay.csv
+│       ├── psr_fuel_type_mapping.csv
+│       ├── uk_cities_coordinates.csv
+│       ├── uk_cities_list.csv
+│       ├── uk_counties_coordinates.csv
+│       └── uk_gsps_coordinates.csv
+├── keys
+├── main.tf
+├── media
+│   ├── uk_power_analytics_data_viz.jpg
+│   ├── uk_power_analytics_data_viz.pdf
+│   └── uk_power_analytics_flowchart.jpg
+├── start_up_script.sh
+└── variables.tf
+```
+
+Below is the file hierarchy of the project. 
+1. `main.tf`, `variables.tf` and `start_up_script.sh` are the essential scripts for terraform.
+2. The `keys` folder is required for GCP authentication. User will need to provide a json credential file named `my-creds.json`
+3. The `airflow_workflows` folder consists of the `Dockerfile` and `docker-compose.yml` used to create docker images and containers for the batch operations with Airflow and Spark.
+4. The `dags` folder contains the main data ingestion DAG scripts to be run by airflow.
+5. The `common` folder contains all essential scripts of configurations and helper functions for the DAGs to utilise.
+6. The `jobs` folder consists of the spark operation scripts to be executed by the DAGs.
+7. The `resources` folder contains all supplementary CSV datasets that helps with data transformation and visualisation. 
+
+
+
 ## Data sources
 The power generation data comes from the Elexon Insights Solution platform (https://bmrs.elexon.co.uk/). 
 
