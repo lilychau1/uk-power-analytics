@@ -42,7 +42,7 @@ Data pipeline for analysing Elexon electricity generation output per generation 
 ---
 
 ## Background
-This project is a proof of concept showcasing an end-to-end data ingestion pipeline that utilizes Terraform, Google Cloud Platform (GCP), Apache Airflow, and Docker to analyze the Elexon BMRS electricity generation data via its [Insights Solution data platform](https://bmrs.elexon.co.uk/). The analysis focuses on electricity output by individual generating units in the UK, segregated by region, production source, and source type (clean, fossil, nuclear, or others). 
+This project is a proof of concept showcasing an end-to-end data ingestion pipeline that utilises Terraform, Google Cloud Platform (GCP), Apache Airflow, and Docker to analyse the Elexon BMRS electricity generation data via its [Insights Solution data platform](https://bmrs.elexon.co.uk/). The analysis focuses on electricity output by individual generating units in the UK, segregated by region, production source, and source type (clean, fossil, nuclear, or others). 
 
 The analysis aims to offer valuable insights into the carbon footprint associated with electricity generation on a national scale. Furthermore, it serves as an initial exploration for transmission system planning, particularly in the context of transitioning away from fossil-fueled power generation in alignment with the Net Zero initiative.
 
